@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des interventions{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">📋 Liste des interventions</h1>
+
+    <table class="table table-striped table-hover table-bordered align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Référence</th>
+                <th scope="col">Client</th>
+                <th scope="col">Adresse</th>
+                <th scope="col">Téléphone</th>
+                <th scope="col">Email</th>
+                <th scope="col">Description</th>
+                <th scope="col">Date</th>
+                <th scope="col">État</th>
+                <th scope="col">Technicien</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for intervention in interventions %}
+                <tr>
+                    <td>{{ intervention.id }}</td>
+                    <td>{{ intervention.reference }}</td>
+                    <td>{{ intervention.nomClient }} {{ intervention.prenomClient }}</td>
+                    <td>{{ intervention.adresseClient }}</td>
+                    <td>{{ intervention.telephoneClient }}</td>
+                    <td>{{ intervention.emailClient }}</td>
+                    <td>{{ intervention.description }}</td>
+                    <td>{{ intervention.dateIntervention|date('d/m/Y H:i') }}</td>
+                    <td>
+                        {% if intervention.etat == 'Terminée' %}
+                            <span class="badge bg-success">{{ intervention.etat }}</span>
+                        {% elseif intervention.etat == 'En cours' %}
+                            <span class="badge bg-warning text-dark">{{ intervention.etat }}</span>
+                        {% else %}
+                            <span class="badge bg-secondary">{{ intervention.etat }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ intervention.technicien }}</td>
+                    <td>
+                        <a href="{{ path('intervention_show', {id: intervention.id}) }}" class="btn btn-sm btn-info">👁 Voir</a>
+                        <a href="{{ path('intervention_print', {id: intervention.id}) }}" class="btn btn-sm btn-secondary">🖨 Imprimer</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="11" class="text-center text-muted">Aucune intervention trouvée</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('intervention_new') }}" class="btn btn-primary mt-3">➕ Nouvelle intervention</a>
+</div>
+{% endblock %}

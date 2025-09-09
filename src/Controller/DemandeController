@@ -1,0 +1,47 @@
+<?php
+
+namespace App\Controller;
+
+use App\Entity\Intervention;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+class DemandeController extends AbstractController
+{
+    #[Route('/demande', name: 'demande_intervention')]
+    public function demande(Request $request, EntityManagerInterface $em): Response
+    {
+        $intervention = new Intervention();
+
+        $form = $this->createFormBuilder($intervention)
+            ->add('nomClient')
+            ->add('prenomClient')
+            ->add('adresseClient')
+            ->add('telephoneClient')
+            ->add('emailClient')
+            ->add('description')
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $intervention->setReference('REF-'.uniqid());
+            $intervention->setDateIntervention(new \DateTime());
+            $intervention->setEtat('En attente');
+            $intervention->setTechnicien('Non assigné');
+
+            $em->persist($intervention);
+            $em->flush();
+
+            $this->addFlash('success', 'Votre demande a été enregistrée !');
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('demande/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+}

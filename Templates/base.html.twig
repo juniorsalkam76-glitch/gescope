@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}GeScope{% endblock %}</title>
+
+    <!-- ✅ Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ asset('styles.css') }}">
+</head>
+<body>
+    <!-- ✅ Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ path('home') }}">GeScope</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('intervention_new') }}">Nouvelle intervention</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('intervention_list') }}">Liste des interventions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('demande_intervention') }}">Demande en ligne</a>
+                    </li>
+                </ul>
+
+                <!-- ✅ Bouton appel service client -->
+                <a href="tel:+33600000000" class="btn btn-success">
+                    📞 Appeler le service client
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ✅ Messages flash -->
+    <div class="container">
+        {% for label, messages in app.flashes %}
+            {% for msg in messages %}
+                <div class="alert alert-{{ label }} mt-2">{{ msg }}</div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+
+    <!-- ✅ Contenu -->
+    <main class="container">
+        {% block body %}{% endblock %}
+    </main>
+
+    <!-- ✅ Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('form-validation.js') }}"></script>
+</body>
+</html>
